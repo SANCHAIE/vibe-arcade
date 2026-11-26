@@ -1,0 +1,12 @@
+name: 🔍 ตรวจไฟล์เกม (CI)
+on:
+  pull_request:
+    paths: ["games/**"]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: ตรวจว่า JSON ถูกต้องและมีช่องครบ
+        run: python3 scripts/build.py --out /tmp/games.json --strict
