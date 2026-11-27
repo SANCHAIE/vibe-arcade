@@ -1,0 +1,58 @@
+[
+  {
+    "team": "ท้ายพี่เบล",
+    "title": "นักวิ่งเก็บขยะ",
+    "emoji": "🙉",
+    "description": "พาเจ้าจิ้งจอกวิ่งเก็บถุงขยะในสวนให้รอด 30 วินาที กระโดดข้ามกรวยกับลังไม้ ก้มหลบโดรน และระวังครึ่งหลังสิ่งกีดขวางจะมาถี่ขึ้น",
+    "play": "https://berrybaitoei.github.io/crab-rescue/",
+    "repo": "https://github.com/BerryBaitoei/crab-rescue"
+  },
+  {
+    "team": "Judy888",
+    "title": "บางแสนบางใส",
+    "emoji": "🐀",
+    "description": "บำบัดนํ้าเสีย",
+    "play": "https://sosoylll.github.io/vibe-game-starter/",
+    "repo": "https://github.com/Sosoylll/vibe-game-starter"
+  },
+  {
+    "team": "ท้ายพี่ปอ",
+    "title": "ช่วยทะเลจากปีศาจขยะ",
+    "emoji": "👹",
+    "description": "เลือกตัวละครที่จะใช้เพื่อต่อสู้กับปีศาจที่มาบุกทะเลบางแสนและใช้สกิลในการต่อสู้สามารถเล่นได้ทั้งคนเดียวและสองคนโดยต้องต่อสู้และเก็บขยะเพื่อฮีลเลือด",
+    "play": "https://mindjun13.github.io/vibe-game-starter/",
+    "repo": "https://github.com/mindjun13/vibe-game-starter"
+  },
+  {
+    "team": "ทีมอาจารย์ (ตัวอย่าง)",
+    "title": "ปูน้อยเก็บดาว",
+    "emoji": "🦀",
+    "description": "เกมตัวอย่าง: ลากปูไปเก็บดาวให้ได้มากที่สุด",
+    "play": "https://sanchaie.github.io/vibe-game-starter/",
+    "repo": "https://github.com/SANCHAIE/vibe-game-starter"
+  },
+  {
+    "team": "husshusshuss",
+    "title": "Saved Bangsean",
+    "emoji": "🏖️",
+    "description": "เกมเก็บขยะ หลีกเลี่ยงระเบิด",
+    "play": "https://h3lloasc-afk.github.io/husshusshuss/",
+    "repo": "https://github.com/h3lloasc-afk/husshusshuss/"
+  },
+  {
+    "team": "kay888",
+    "title": "save beach",
+    "emoji": "🐢",
+    "description": "เก็บขยะภายในเวลา 60 วินาที",
+    "play": "https://chocmatcha.github.io/nmachocchip/",
+    "repo": "https://github.com/chocmatcha/nmachocchip"
+  },
+  {
+    "team": "kame",
+    "title": "save turtle",
+    "emoji": "🥚",
+    "description": "เกมป้องกันไข่เต่าจากศัตรูต่างๆ",
+    "play": "https://manaochandayo-sys.github.io/crab-game/",
+    "repo": "https://github.com/manaochandayo-sys/crab-game"
+  }
+]

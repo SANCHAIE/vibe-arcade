@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vibe Arcade</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #071630;
+      --panel: #0f2a52;
+      --line: #1f4a85;
+      --text: #eef4ff;
+      --muted: #9db4d8;
+      --accent: #ff9f1a;
+      --cyan: #34d3ff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: radial-gradient(1200px 600px at 50% -10%, #133a73 0%, var(--bg) 60%);
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: "Kanit", system-ui, sans-serif;
+      min-height: 100vh;
+      padding: 24px 16px 48px;
+    }
+    header { text-align: center; margin-bottom: 28px; }
+    .eyebrow { color: var(--cyan); letter-spacing: 0.3em; font-size: 0.85rem; }
+    h1 {
+      font-size: clamp(2.2rem, 6vw, 4rem);
+      font-weight: 800;
+      line-height: 1.1;
+      margin: 6px 0;
+    }
+    h1 span { color: var(--accent); }
+    .count { color: var(--muted); font-size: 1.1rem; }
+    .count b { color: var(--accent); font-size: 1.4rem; }
+
+    #grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 18px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .card {
+      background: var(--panel);
+      border: 2px solid var(--line);
+      border-radius: 16px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: transform 0.15s, border-color 0.15s;
+    }
+    .card:hover { transform: translateY(-3px); border-color: var(--cyan); }
+    .card.new { border-color: var(--accent); animation: pop 0.6s ease-out; }
+    @keyframes pop { 0% { transform: scale(0.85); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+    .emoji { font-size: 3rem; line-height: 1; }
+    .title { font-size: 1.35rem; font-weight: 600; }
+    .team { color: var(--cyan); font-size: 0.95rem; }
+    .desc { color: var(--muted); font-size: 0.95rem; flex: 1; }
+    .actions { display: flex; gap: 8px; margin-top: 6px; }
+    .btn {
+      flex: 1;
+      text-align: center;
+      padding: 10px;
+      border-radius: 10px;
+      font: inherit;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      border: 2px solid transparent;
+    }
+    .btn.play { background: var(--accent); color: #1a1000; }
+    .btn.repo { background: transparent; color: var(--text); border-color: var(--line); }
+    .btn:hover { filter: brightness(1.1); }
+    .badge {
+      align-self: flex-start;
+      background: var(--accent);
+      color: #1a1000;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 99px;
+    }
+
+    #error {
+      display: none;
+      max-width: 700px;
+      margin: 0 auto 20px;
+      background: #4a1220;
+      border: 2px solid #ff5a7a;
+      border-radius: 12px;
+      padding: 14px 18px;
+    }
+
+    /* หน้าต่างเล่นเกม */
+    #player {
+      position: fixed;
+      inset: 0;
+      background: rgba(3, 10, 25, 0.92);
+      display: none;
+      flex-direction: column;
+      padding: 12px;
+      z-index: 10;
+    }
+    #player.open { display: flex; }
+    #player .bar { display: flex; justify-content: space-between; align-items: center; padding: 4px 4px 10px; gap: 12px; }
+    #player .bar b { font-size: 1.2rem; }
+    #player iframe { flex: 1; border: 0; border-radius: 12px; background: #000; width: 100%; }
+    #close { flex: 0 0 auto; background: var(--panel); color: var(--text); border-color: var(--line); }
+
+    /* QR สแกนเปิดบนมือถือ */
+    header { position: relative; }
+    #siteQr {
+      position: absolute; top: 0; right: 0;
+      background: #fff; color: #0b1c3a;
+      border-radius: 14px; padding: 10px 10px 6px;
+      text-align: center; font-size: 0.85rem; font-weight: 600;
+      width: 156px;
+    }
+    #siteQr svg, #qrBig svg { display: block; width: 100%; height: auto; }
+    #qrBig { width: min(100%, 58vh); margin: 8px auto 0; }
+    @media (max-width: 900px) { #siteQr { display: none; } }
+    .btn.qr { flex: 0 0 auto; padding: 10px 12px; background: transparent; color: var(--text); border-color: var(--line); }
+    #qrPop {
+      position: fixed; inset: 0; z-index: 20;
+      background: rgba(3, 10, 25, 0.92);
+      display: none; align-items: center; justify-content: center; padding: 16px;
+    }
+    #qrPop.open { display: flex; }
+    #qrPop .box {
+      background: #fff; color: #0b1c3a; border-radius: 20px;
+      padding: 24px; text-align: center; width: min(460px, 100%);
+    }
+    #qrPop .box b { display: block; font-size: 1.5rem; margin-bottom: 4px; }
+    #qrPop .box small { display: block; color: #4a5f80; word-break: break-all; margin-top: 10px; }
+    #qrClose { margin-top: 14px; background: #0f2a52; color: #fff; width: 100%; }
+
+    footer { text-align: center; color: var(--muted); margin-top: 36px; font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="eyebrow">WORKSHOP 07 · VIBE GAME JAM</div>
+    <h1>VIBE <span>ARCADE</span></h1>
+    <div class="count">เกมที่ลงสนามแล้ว <b id="count">0</b> เกม</div>
+    <div id="siteQr" hidden><div id="siteQrImg"></div>📱 สแกนเปิดบนมือถือ</div>
+  </header>
+
+  <div id="error"></div>
+  <div id="grid"></div>
+
+  <div id="player" role="dialog" aria-modal="true">
+    <div class="bar">
+      <b id="playerTitle"></b>
+      <button id="close" class="btn">✕ ปิด</button>
+    </div>
+    <iframe id="frame" title="เกม" allow="autoplay; fullscreen"></iframe>
+  </div>
+
+  <div id="qrPop" role="dialog" aria-modal="true">
+    <div class="box">
+      <b id="qrTitle"></b>
+      <div>สแกนเล่นบนมือถือ</div>
+      <div id="qrBig"></div>
+      <small id="qrUrl"></small>
+      <button id="qrClose" class="btn">✕ ปิด</button>
+    </div>
+  </div>
+
+  <footer>ส่งเกมของทีมด้วย Pull Request (สร้างไฟล์ games/ชื่อทีม.json) · หน้านี้อัปเดตอัตโนมัติทุก 30 วินาที</footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+  <script>
+    const grid = document.getElementById("grid");
+    const countEl = document.getElementById("count");
+    const errorEl = document.getElementById("error");
+    const player = document.getElementById("player");
+    const frame = document.getElementById("frame");
+    const seen = new Set();
+    let firstLoad = true;
+
+    // รับเฉพาะลิงก์ https เท่านั้น
+    function safeUrl(u) {
+      try {
+        const url = new URL(u);
+        return url.protocol === "https:" ? url.href : null;
+      } catch { return null; }
+    }
+
+    function el(tag, cls, text) {
+      const e = document.createElement(tag);
+      if (cls) e.className = cls;
+      if (text != null) e.textContent = text;
+      return e;
+    }
+
+    function render(games) {
+      grid.replaceChildren();
+      games.forEach((g) => {
+        const key = (g.repo || "") + "|" + (g.title || "");
+        const isNew = !firstLoad && !seen.has(key);
+        seen.add(key);
+
+        const card = el("article", "card" + (isNew ? " new" : ""));
+        if (isNew) card.append(el("span", "badge", "NEW!"));
+        card.append(
+          el("div", "emoji", g.emoji || "🎮"),
+          el("div", "title", g.title || "(ไม่มีชื่อเกม)"),
+          el("div", "team", "ทีม " + (g.team || "?")),
+          el("p", "desc", g.description || "")
+        );
+
+        const actions = el("div", "actions");
+        const play = safeUrl(g.play);
+        const repo = safeUrl(g.repo);
+        if (play) {
+          const b = el("button", "btn play", "▶ เล่นเลย");
+          b.onclick = () => openGame(g.title, play);
+          actions.append(b);
+        }
+        if (play && window.qrcode) {
+          const q = el("button", "btn qr", "QR");
+          q.title = "QR สแกนเล่นบนมือถือ";
+          q.setAttribute("aria-label", "QR สแกนเล่นบนมือถือ");
+          q.onclick = () => showQr(g.title, play);
+          actions.append(q);
+        }
+        if (repo) {
+          const a = el("a", "btn repo", "</> Repo");
+          a.href = repo;
+          a.target = "_blank";
+          a.rel = "noopener";
+          actions.append(a);
+        }
+        card.append(actions);
+        grid.append(card);
+      });
+      countEl.textContent = games.length;
+      firstLoad = false;
+    }
+
+    async function load() {
+      try {
+        const res = await fetch("games.json?t=" + Date.now(), { cache: "no-store" });
+        const text = await res.text();
+        let games;
+        try {
+          games = JSON.parse(text);
+        } catch (e) {
+          throw new Error("โหลดรายชื่อเกมไม่ได้ ให้ดูผลใน GitHub Actions → " + e.message);
+        }
+        if (!Array.isArray(games)) throw new Error("games.json ต้องเป็นรายการ [ ... ]");
+        errorEl.style.display = "none";
+        render(games);
+      } catch (e) {
+        errorEl.textContent = "⚠️ " + e.message;
+        errorEl.style.display = "block";
+      }
+    }
+
+    function openGame(title, url) {
+      document.getElementById("playerTitle").textContent = title || "";
+      frame.src = url;
+      player.classList.add("open");
+    }
+    function closeGame() {
+      player.classList.remove("open");
+      frame.src = "about:blank";
+    }
+    // สร้าง QR เป็น SVG (ถ้าโหลดไลบรารีไม่ได้ ก็แค่ไม่แสดง QR)
+    function qrSvg(text) {
+      const q = qrcode(0, "M");
+      q.addData(text);
+      q.make();
+      return q.createSvgTag({ cellSize: 8, margin: 2, scalable: true });
+    }
+    const qrPop = document.getElementById("qrPop");
+    function showQr(title, url) {
+      document.getElementById("qrTitle").textContent = title || "";
+      document.getElementById("qrBig").innerHTML = qrSvg(url);
+      document.getElementById("qrUrl").textContent = url;
+      qrPop.classList.add("open");
+    }
+    function closeQr() { qrPop.classList.remove("open"); }
+    document.getElementById("qrClose").onclick = closeQr;
+    qrPop.onclick = (e) => { if (e.target === qrPop) closeQr(); };
+    if (window.qrcode) {
+      const here = location.origin + location.pathname;
+      document.getElementById("siteQrImg").innerHTML = qrSvg(here);
+      document.getElementById("siteQr").hidden = false;
+    }
+
+    document.getElementById("close").onclick = closeGame;
+    window.addEventListener("keydown", (e) => { if (e.key === "Escape") { closeGame(); closeQr(); } });
+
+    load();
+    setInterval(load, 30000);
+  </script>
+</body>
+</html>
