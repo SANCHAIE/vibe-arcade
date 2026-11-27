@@ -112,6 +112,33 @@
     #player iframe { flex: 1; border: 0; border-radius: 12px; background: #000; width: 100%; }
     #close { flex: 0 0 auto; background: var(--panel); color: var(--text); border-color: var(--line); }
 
+    /* QR สแกนเปิดบนมือถือ */
+    header { position: relative; }
+    #siteQr {
+      position: absolute; top: 0; right: 0;
+      background: #fff; color: #0b1c3a;
+      border-radius: 14px; padding: 10px 10px 6px;
+      text-align: center; font-size: 0.85rem; font-weight: 600;
+      width: 156px;
+    }
+    #siteQr svg, #qrBig svg { display: block; width: 100%; height: auto; }
+    #qrBig { width: min(100%, 58vh); margin: 8px auto 0; }
+    @media (max-width: 900px) { #siteQr { display: none; } }
+    .btn.qr { flex: 0 0 auto; padding: 10px 12px; background: transparent; color: var(--text); border-color: var(--line); }
+    #qrPop {
+      position: fixed; inset: 0; z-index: 20;
+      background: rgba(3, 10, 25, 0.92);
+      display: none; align-items: center; justify-content: center; padding: 16px;
+    }
+    #qrPop.open { display: flex; }
+    #qrPop .box {
+      background: #fff; color: #0b1c3a; border-radius: 20px;
+      padding: 24px; text-align: center; width: min(460px, 100%);
+    }
+    #qrPop .box b { display: block; font-size: 1.5rem; margin-bottom: 4px; }
+    #qrPop .box small { display: block; color: #4a5f80; word-break: break-all; margin-top: 10px; }
+    #qrClose { margin-top: 14px; background: #0f2a52; color: #fff; width: 100%; }
+
     footer { text-align: center; color: var(--muted); margin-top: 36px; font-size: 0.9rem; }
   </style>
 </head>
@@ -120,6 +147,7 @@
     <div class="eyebrow">WORKSHOP 07 · VIBE GAME JAM</div>
     <h1>VIBE <span>ARCADE</span></h1>
     <div class="count">เกมที่ลงสนามแล้ว <b id="count">0</b> เกม</div>
+    <div id="siteQr" hidden><div id="siteQrImg"></div>📱 สแกนเปิดบนมือถือ</div>
   </header>
 
   <div id="error"></div>
@@ -133,8 +161,19 @@
     <iframe id="frame" title="เกม" allow="autoplay; fullscreen"></iframe>
   </div>
 
+  <div id="qrPop" role="dialog" aria-modal="true">
+    <div class="box">
+      <b id="qrTitle"></b>
+      <div>สแกนเล่นบนมือถือ</div>
+      <div id="qrBig"></div>
+      <small id="qrUrl"></small>
+      <button id="qrClose" class="btn">✕ ปิด</button>
+    </div>
+  </div>
+
   <footer>ส่งเกมของทีมด้วย Pull Request (สร้างไฟล์ games/ชื่อทีม.json) · หน้านี้อัปเดตอัตโนมัติทุก 30 วินาที</footer>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
   <script>
     const grid = document.getElementById("grid");
     const countEl = document.getElementById("count");
@@ -183,6 +222,13 @@
           b.onclick = () => openGame(g.title, play);
           actions.append(b);
         }
+        if (play && window.qrcode) {
+          const q = el("button", "btn qr", "QR");
+          q.title = "QR สแกนเล่นบนมือถือ";
+          q.setAttribute("aria-label", "QR สแกนเล่นบนมือถือ");
+          q.onclick = () => showQr(g.title, play);
+          actions.append(q);
+        }
         if (repo) {
           const a = el("a", "btn repo", "</> Repo");
           a.href = repo;
@@ -225,8 +271,31 @@
       player.classList.remove("open");
       frame.src = "about:blank";
     }
+    // สร้าง QR เป็น SVG (ถ้าโหลดไลบรารีไม่ได้ ก็แค่ไม่แสดง QR)
+    function qrSvg(text) {
+      const q = qrcode(0, "M");
+      q.addData(text);
+      q.make();
+      return q.createSvgTag({ cellSize: 8, margin: 2, scalable: true });
+    }
+    const qrPop = document.getElementById("qrPop");
+    function showQr(title, url) {
+      document.getElementById("qrTitle").textContent = title || "";
+      document.getElementById("qrBig").innerHTML = qrSvg(url);
+      document.getElementById("qrUrl").textContent = url;
+      qrPop.classList.add("open");
+    }
+    function closeQr() { qrPop.classList.remove("open"); }
+    document.getElementById("qrClose").onclick = closeQr;
+    qrPop.onclick = (e) => { if (e.target === qrPop) closeQr(); };
+    if (window.qrcode) {
+      const here = location.origin + location.pathname;
+      document.getElementById("siteQrImg").innerHTML = qrSvg(here);
+      document.getElementById("siteQr").hidden = false;
+    }
+
     document.getElementById("close").onclick = closeGame;
-    window.addEventListener("keydown", (e) => { if (e.key === "Escape") closeGame(); });
+    window.addEventListener("keydown", (e) => { if (e.key === "Escape") { closeGame(); closeQr(); } });
 
     load();
     setInterval(load, 30000);
