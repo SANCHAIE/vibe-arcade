@@ -1,0 +1,26 @@
+[
+  {
+    "team": "ทีมอาจารย์ (ตัวอย่าง)",
+    "title": "ปูน้อยเก็บดาว",
+    "emoji": "🦀",
+    "description": "เกมตัวอย่าง: ลากปูไปเก็บดาวให้ได้มากที่สุด",
+    "play": "https://sanchaie.github.io/vibe-game-starter/",
+    "repo": "https://github.com/SANCHAIE/vibe-game-starter"
+  },
+  {
+    "team": "husshusshuss",
+    "title": "Saved Bangsean",
+    "emoji": "🏖️",
+    "description": "เกมเก็บขยะ หลีกเลี่ยงระเบิด",
+    "play": "https://h3lloasc-afk.github.io/husshusshuss/",
+    "repo": "https://github.com/h3lloasc-afk/husshusshuss/"
+  },
+  {
+    "team": "kay888",
+    "title": "save beach",
+    "emoji": "🐢",
+    "description": "เก็บขยะภายในเวลา 60 วินาที",
+    "play": "https://chocmatcha.github.io/nmachocchip/",
+    "repo": "https://github.com/chocmatcha/nmachocchip"
+  }
+]
