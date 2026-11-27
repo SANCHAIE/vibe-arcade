@@ -22,6 +22,7 @@
 6. อาจารย์กด **Merge** แล้วเกมจะขึ้นจอใหญ่ภายในประมาณ 1 นาที 🎉
 
 ## สำหรับอาจารย์ (ตั้งค่าครั้งแรก)
-- Settings → Pages → Source: **Deploy from a branch** · main · / (root) (workflow จะรวม games.json แล้ว commit ให้เอง)
+- Settings → Pages → Source: **Deploy from a branch** · gh-pages · / (root) (workflow รวม games.json แล้ว push ไป gh-pages ให้เอง)
+- main ล็อกไว้: PR ต้องผ่าน CI (validate) ก่อนจึงกด Merge ได้
 - PR จากบัญชีใหม่ต้องกด **Approve and run** ก่อน CI จะทำงาน (ทำบนจอใหญ่ให้นักเรียนเห็นได้)
 - ทดสอบในเครื่อง: `python3 scripts/build.py --out games.json` แล้วเปิด `index.html` ผ่าน local server

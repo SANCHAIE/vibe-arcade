@@ -1,14 +1,14 @@
 name: 🚀 รวมเกมเข้า Arcade
-# Pages เปิดแบบ Deploy from a branch (main / root)
-# workflow นี้แค่รวม games/*.json เป็น games.json แล้ว commit กลับ
+# main ถูกล็อก (ต้องผ่าน CI) บอทจึง deploy ไปที่ branch gh-pages แทน
+# Pages: Deploy from a branch · gh-pages · / (root)
 on:
   push:
     branches: [main]
-    paths: ["games/**", "scripts/build.py"]
   workflow_dispatch:
 
 permissions:
   contents: write
+  pages: write
 
 concurrency:
   group: build-games
@@ -20,13 +20,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: รวมเกมทุกทีม
-        run: python3 scripts/build.py --out games.json
-      - name: commit games.json
         run: |
+          mkdir -p _site
+          cp index.html _site/
+          touch _site/.nojekyll
+          python3 scripts/build.py --out _site/games.json
+      - name: push ไป gh-pages
+        run: |
+          cd _site
+          git init -q -b gh-pages
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add games.json
-          git diff --cached --quiet && exit 0
-          git commit -m "อัปเดตรายชื่อเกมใน Arcade"
-          git pull --rebase -q
-          git push
+          git add -A
+          git commit -q -m "Arcade จาก ${GITHUB_SHA::7}"
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" gh-pages
+      - name: สั่ง build Pages
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X POST "repos/${{ github.repository }}/pages/builds" || true
