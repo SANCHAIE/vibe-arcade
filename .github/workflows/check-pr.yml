@@ -1,7 +1,6 @@
 name: 🔍 ตรวจไฟล์เกม (CI)
 on:
   pull_request:
-    paths: ["games/**"]
 
 jobs:
   validate:
