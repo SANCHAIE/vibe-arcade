@@ -1,5 +1,21 @@
 [
   {
+    "team": "ท้ายพี่เบล",
+    "title": "นักวิ่งเก็บขยะ",
+    "emoji": "🙉",
+    "description": "พาเจ้าจิ้งจอกวิ่งเก็บถุงขยะในสวนให้รอด 30 วินาที กระโดดข้ามกรวยกับลังไม้ ก้มหลบโดรน และระวังครึ่งหลังสิ่งกีดขวางจะมาถี่ขึ้น",
+    "play": "https://berrybaitoei.github.io/crab-rescue/",
+    "repo": "https://github.com/BerryBaitoei/crab-rescue"
+  },
+  {
+    "team": "ท้ายพี่ปอ",
+    "title": "ช่วยทะเลจากปีศาจขยะ",
+    "emoji": "👹",
+    "description": "เลือกตัวละครที่จะใช้เพื่อต่อสู้กับปีศาจที่มาบุกทะเลบางแสนและใช้สกิลในการต่อสู้สามารถเล่นได้ทั้งคนเดียวและสองคนโดยต้องต่อสู้และเก็บขยะเพื่อฮีลเลือด",
+    "play": "https://mindjun13.github.io/vibe-game-starter/",
+    "repo": "https://github.com/mindjun13/vibe-game-starter"
+  },
+  {
     "team": "ทีมอาจารย์ (ตัวอย่าง)",
     "title": "ปูน้อยเก็บดาว",
     "emoji": "🦀",
