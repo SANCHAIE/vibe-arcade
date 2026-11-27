@@ -22,6 +22,6 @@
 6. อาจารย์กด **Merge** แล้วเกมจะขึ้นจอใหญ่ภายในประมาณ 1 นาที 🎉
 
 ## สำหรับอาจารย์ (ตั้งค่าครั้งแรก)
-- Settings → Pages → Source: **GitHub Actions**
+- Settings → Pages → Source: **Deploy from a branch** · main · / (root) (workflow จะรวม games.json แล้ว commit ให้เอง)
 - PR จากบัญชีใหม่ต้องกด **Approve and run** ก่อน CI จะทำงาน (ทำบนจอใหญ่ให้นักเรียนเห็นได้)
 - ทดสอบในเครื่อง: `python3 scripts/build.py --out games.json` แล้วเปิด `index.html` ผ่าน local server

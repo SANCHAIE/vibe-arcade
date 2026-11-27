@@ -1,34 +1,32 @@
-name: 🚀 Deploy Arcade
+name: 🚀 รวมเกมเข้า Arcade
+# Pages เปิดแบบ Deploy from a branch (main / root)
+# workflow นี้แค่รวม games/*.json เป็น games.json แล้ว commit กลับ
 on:
   push:
     branches: [main]
+    paths: ["games/**", "scripts/build.py"]
   workflow_dispatch:
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write
 
 concurrency:
-  group: pages
-  cancel-in-progress: true
+  group: build-games
+  cancel-in-progress: false
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
       - name: รวมเกมทุกทีม
+        run: python3 scripts/build.py --out games.json
+      - name: commit games.json
         run: |
-          mkdir -p _site
-          cp index.html _site/
-          python3 scripts/build.py --out _site/games.json
-      - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: _site
-      - id: deployment
-        uses: actions/deploy-pages@v4
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add games.json
+          git diff --cached --quiet && exit 0
+          git commit -m "อัปเดตรายชื่อเกมใน Arcade"
+          git pull --rebase -q
+          git push
